@@ -1,12 +1,16 @@
 package practice;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 public class Birthdays {
 
     public static void main(String[] args) {
 
-        int day = 31;
-        int month = 12;
-        int year = 1990;
+        int day = 14;
+        int month = 02;
+        int year = 1999;
 
         System.out.println(collectBirthdays(year, month, day));
 
@@ -14,10 +18,17 @@ public class Birthdays {
 
     public static String collectBirthdays(int year, int month, int day) {
 
-        //TODO реализуйте метод для построения строки в следующем виде
-        //0 - 31.12.1990 - Mon
-        //1 - 31.12.1991 - Tue
-        
-        return "";
+        LocalDate today = LocalDate.now();
+        LocalDate birthday = LocalDate.of(year, month, day);
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy - E", Locale.ENGLISH);
+        int years = 0;
+        String collectBirthdays = "";
+        while (birthday.isBefore(today) || birthday.isEqual(today)) {
+            collectBirthdays = collectBirthdays.concat(years + " - "  + format.format(birthday) + "\n");
+            years++;
+            birthday = birthday.plusYears(1);
+        }
+        return collectBirthdays;
     }
 }
+
