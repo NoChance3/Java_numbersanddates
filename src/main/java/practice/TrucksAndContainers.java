@@ -7,22 +7,59 @@ public class TrucksAndContainers {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        //получение количество коробок от пользователя
-        int boxes = scanner.nextInt();
+        int box = scanner.nextInt();
 
-        // TODO: вывести в консоль коробки разложенные по грузовикам и контейнерам
-        // пример вывода при вводе 2
-        // для отступа используйте табуляцию - \t
+        TrucksAndContainers containers = new TrucksAndContainers(box);
+        System.out.println(containers);
 
-        /*
-        Грузовик: 1
-            Контейнер: 1
-                Ящик: 1
-                Ящик: 2
-        Необходимо:
-        грузовиков - 1 шт.
-        контейнеров - 1 шт.
-        */
+    }
+        public TrucksAndContainers(int box) {
+            this.box = box;
+        }
+        private static final int BOX_IN_CONTAINER = 27;
+        private static final int CONTAINER_IN_TRUCK = 12;
+        private final int box;
+        private int container;
+        private int truck;
+
+        private int containerNeed() {
+            container = box / BOX_IN_CONTAINER + (box % BOX_IN_CONTAINER == 0 ? 0 : 1);
+            return container;
+        }
+        private int truckNeed() {
+            truck = containerNeed() / CONTAINER_IN_TRUCK + (containerNeed() % CONTAINER_IN_TRUCK == 0 ? 0 : 1);
+            return truck;
+        }
+
+        private String distribution() {
+            int container = 0;
+            int box = 0;
+            int truck = 0;
+            String distribution = "";
+            for (int i = 0; i < this.box; i++) {
+                box++;
+                if (box % BOX_IN_CONTAINER == 1) {
+                    container++;
+                }
+                if (container % CONTAINER_IN_TRUCK == 1 && box % BOX_IN_CONTAINER == 1){
+                    truck++;
+                    distribution = distribution.concat("Грузовик: ").concat(String.valueOf(truck)).concat("\n");
+                }
+                if (box % BOX_IN_CONTAINER == 1) {
+                    distribution = distribution.concat("\tКонтейнер: ").concat(String.valueOf(container)).concat("\n");
+                }
+                distribution = distribution.concat("\t\tЯщик: ").concat(String.valueOf(box)).concat("\n");
+            }
+            return distribution;
+        }
+
+        public String toString() {
+            return  distribution() +
+                    "Необходимо:\n" +
+                    "грузовиков - " + truckNeed() + " шт.\n" +
+                    "контейнеров - " + containerNeed() + " шт.\n";
+        }
+
     }
 
-}
+
